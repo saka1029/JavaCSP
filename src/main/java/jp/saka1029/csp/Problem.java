@@ -36,4 +36,10 @@ public class Problem {
         return c;
     }
 
+    public void allDifferent(Variable... variables) {
+        for (int i = 0, size = variables.length; i < size; ++i)
+            for (int j = i + 1; j < size; ++j)
+                constraint(a -> a[0] != a[1], variables[i], variables[j]);
+    }
+
 }

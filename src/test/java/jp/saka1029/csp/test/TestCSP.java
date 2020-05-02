@@ -19,16 +19,17 @@ class TestCSP {
     @Test
     void testAll() {
         Problem problem = new Problem();
-        Domain domain = Domain.of(1, 2, 3);
+        Domain domain = Domain.of(0, 1, 2, 3);
         Variable A = problem.variable("A", domain);
         Variable B = problem.variable("B", domain);
         Variable C = problem.variable("C", domain);
         Constraint X = problem.constraint(a -> a[0] + a[1] == a[2], A, B, C);
         Constraint Y = problem.constraint(a -> a[0] < a[1], A, B);
+        problem.allDifferent(A, B, C);
         Solver solver = new Solver();
         Set<Map<Variable, Integer>> actualResult = new HashSet<>();
         solver.solve(problem, r -> actualResult.add(Map.copyOf(r)));
-        assertEquals("[1, 2, 3]", domain.toString());
+        assertEquals("[0, 1, 2, 3]", domain.toString());
         assertEquals(A, problem.variable("A"));
         assertEquals("A", A.name);
         assertEquals("A", A.toString());

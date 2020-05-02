@@ -6,8 +6,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class Solver {
+
+    static Logger logger = Logger.getLogger(Solver.class.getName());
 
     static List<List<Constraint>> constraintOrder(final List<Variable> bindingOrder, final List<Constraint> constraints) {
         final int variableSize = bindingOrder.size();

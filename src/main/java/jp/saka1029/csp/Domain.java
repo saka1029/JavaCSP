@@ -1,26 +1,20 @@
 package jp.saka1029.csp;
 
-import static java.util.stream.Collectors.*;
+import java.util.AbstractList;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.IntStream;
+public class Domain extends AbstractList<Integer> {
 
-public class Domain {
+    private final int[] elements;
 
-    public final List<Integer> elements;
-
-    Domain(List<Integer> elements) {
-        this.elements = Collections.unmodifiableList(elements);
+    private Domain(int... elements) {
+        this.elements = elements;
     }
 
     public static Domain of(int... elements) {
-        return new Domain(IntStream.of(elements).boxed().collect(toList()));
+        return new Domain(elements);
     }
 
-    @Override
-    public String toString() {
-        return elements.toString();
-    }
+    @Override public Integer get(int index) { return elements[index]; }
+    @Override public int size() { return elements.length; }
 
 }

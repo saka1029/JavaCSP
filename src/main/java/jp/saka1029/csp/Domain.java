@@ -16,4 +16,8 @@ public class Domain extends AbstractList<Integer> {
 
     @Override public Integer get(int index) { return elements[index]; }
     @Override public int size() { return elements.length; }
+<<<<<<< HEAD
+=======
+
+>>>>>>> branch 'master' of https://github.com/saka1029/JavaCSP.git
 }

@@ -57,7 +57,7 @@ public class Solver {
                 else {
                     final Variable v = bindingOrder.get(i);
                     final Domain d = v.domain;
-                    for (int value : d.elements) {
+                    for (int value : d) {
                         result.put(v, value);
                         if (test(i)) solve(i + 1);
                     }

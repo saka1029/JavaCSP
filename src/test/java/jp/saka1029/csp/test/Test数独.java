@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import jp.saka1029.csp.Domain;
@@ -13,42 +14,42 @@ import jp.saka1029.csp.Solver;
 import jp.saka1029.csp.Variable;
 
 class Test数独 {
-    
+
     static Logger logger = Logger.getLogger(Test数独.class.toString());
-    
-    static int SIZE = 9;
-    static int SSIZE = 3;
-    static Domain DIGITS = Domain.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+    static int 辺の長さ = 9;
+    static int 小四角形の辺の長さ = 3;
+    static Domain 定義域 = Domain.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
     static String 名前(int r, int c) {
         return r + "@" + c;
     }
 
     static Variable[][] 変数定義(Problem 問題, int[][] 入力) {
-        Variable[][] 変数 = new Variable[SIZE][SIZE];
-        for (int r = 0; r < SIZE; ++r)
-            for (int c = 0; c < SIZE; ++c)
+        Variable[][] 変数 = new Variable[辺の長さ][辺の長さ];
+        for (int r = 0; r < 辺の長さ; ++r)
+            for (int c = 0; c < 辺の長さ; ++c)
                 変数[r][c] = 問題.variable(名前(r, c),
-                    入力[r][c] == 0 ? DIGITS : Domain.of(入力[r][c]));
+                    入力[r][c] == 0 ? 定義域 : Domain.of(入力[r][c]));
         return 変数;
     }
 
     static void 制約定義(Problem 問題, Variable[][] 変数) {
         List<Variable[]> 制約変数 = new ArrayList<>();
-        for (int r = 0; r < SIZE; ++r)
+        for (int r = 0; r < 辺の長さ; ++r)
             制約変数.add(変数[r]);
-        for (int c = 0; c < SIZE; ++c) {
-            Variable[] va = new Variable[SIZE];
+        for (int c = 0; c < 辺の長さ; ++c) {
+            Variable[] va = new Variable[辺の長さ];
             制約変数.add(va);
-            for (int r = 0; r < SIZE; ++r)
+            for (int r = 0; r < 辺の長さ; ++r)
                 va[r] = 変数[r][c];
         }
-        for (int r = 0; r < SIZE; r += SSIZE)
-            for (int c = 0; c < SIZE; c += SSIZE) {
-                Variable[] va = new Variable[SIZE];
+        for (int r = 0; r < 辺の長さ; r += 小四角形の辺の長さ)
+            for (int c = 0; c < 辺の長さ; c += 小四角形の辺の長さ) {
+                Variable[] va = new Variable[辺の長さ];
                 制約変数.add(va);
-                for (int i = 0, p = 0; i < SSIZE; ++i)
-                    for (int j = 0; j < SSIZE; ++j, ++p)
+                for (int i = 0, p = 0; i < 小四角形の辺の長さ; ++i)
+                    for (int j = 0; j < 小四角形の辺の長さ; ++j, ++p)
                         va[p] = 変数[r + i][c + j];
             }
         for (Variable[] va : 制約変数)
@@ -56,9 +57,9 @@ class Test数独 {
     }
 
     static void 答(Variable[][] 変数, Map<Variable, Integer> 解答) {
-        for (int r = 0; r < SIZE; ++r) {
+        for (int r = 0; r < 辺の長さ; ++r) {
             StringBuilder sb = new StringBuilder();
-            for (int c = 0; c < SIZE; ++c)
+            for (int c = 0; c < 辺の長さ; ++c)
                 sb.append(String.format("%2d", 解答.get(変数[r][c])));
             logger.info(sb.toString());
         }
@@ -90,5 +91,24 @@ class Test数独 {
 		logger.info("test wikipedia");
 		数独(入力);
 	}
+
+    @Disabled
+    @Test
+    void testGood_at_Sudoku_Heres_some_youll_never_complete() {
+        // http://theconversation.com/good-at-sudoku-heres-some-youll-never-complete-5234
+        int[][] 入力 = {
+            { 0, 0, 0, 7, 0, 0, 0, 0, 0 },
+            { 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 4, 3, 0, 2, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 6 },
+            { 0, 0, 0, 5, 0, 9, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 4, 1, 8 },
+            { 0, 0, 0, 0, 8, 1, 0, 0, 0 },
+            { 0, 0, 2, 0, 0, 0, 0, 5, 0 },
+            { 0, 4, 0, 0, 0, 0, 3, 0, 0 },
+        };
+        logger.info("Good at Sudoku Heres some youll never complete");
+        数独(入力);
+    }
 
 }

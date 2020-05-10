@@ -10,17 +10,17 @@ import java.util.logging.Logger;
 
 public class Solver {
 
-    static Logger logger = Logger.getLogger(Solver.class.getName());
+    static final Logger logger = Logger.getLogger(Solver.class.getName());
 
-    static List<List<Constraint>> constraintOrder(final List<Variable> bindingOrder, final List<Constraint> constraints) {
-        final int variableSize = bindingOrder.size();
-        final int constraintSize = constraints.size();
-        final List<List<Constraint>> result = new ArrayList<>(variableSize);
-        final Set<Constraint> done = new HashSet<>(constraintSize);
-        final Set<Variable> bound = new HashSet<>(variableSize);
+    static List<List<Constraint>> constraintOrder(List<Variable> bindingOrder, List<Constraint> constraints) {
+        int variableSize = bindingOrder.size();
+        int constraintSize = constraints.size();
+        List<List<Constraint>> result = new ArrayList<>(variableSize);
+        Set<Constraint> done = new HashSet<>(constraintSize);
+        Set<Variable> bound = new HashSet<>(variableSize);
         for (Variable v : bindingOrder) {
             bound.add(v);
-            final List<Constraint> list = new ArrayList<>();
+            List<Constraint> list = new ArrayList<>();
             result.add(list);
             for (Constraint c : constraints)
                 if (!done.contains(c) && bound.containsAll(c.variables)) {
@@ -31,16 +31,15 @@ public class Solver {
         return result;
     }
 
-    public void solve(final Problem problem, final Answer answer) {
-        final int variableSize = problem.variables.size();
-        final List<Variable> bindingOrder = problem.variables;
-        final List<List<Constraint>> constraintOrder = constraintOrder(bindingOrder, problem.constraints);
-        final int[] arguments = new int[variableSize];
-        final Map<Variable, Integer> result = new LinkedHashMap<>(variableSize);
+    public void solve(Problem problem, List<Variable> bindingOrder, Answer answer) {
+        int variableSize = problem.variables.size();
+        List<List<Constraint>> constraintOrder = constraintOrder(bindingOrder, problem.constraints);
+        int[] arguments = new int[variableSize];
+        Map<Variable, Integer> result = new LinkedHashMap<>(variableSize);
 
         new Object() {
 
-            boolean test(final int i) {
+            boolean test(int i) {
                 for (Constraint c : constraintOrder.get(i)) {
                     int p = 0;
                     for (Variable v : c.variables)
@@ -51,20 +50,25 @@ public class Solver {
                 return true;
             }
 
-            void solve(final int i) {
+            void solve(int i) {
                 if (i >= variableSize)
                     answer.answer(result);
                 else {
-                    final Variable v = bindingOrder.get(i);
-                    final Domain d = v.domain;
+                    Variable v = bindingOrder.get(i);
+                    Domain d = v.domain;
                     for (int value : d) {
                         result.put(v, value);
-                        if (test(i)) solve(i + 1);
+                        if (test(i))
+                            solve(i + 1);
                     }
                 }
             }
 
         }.solve(0);
+    }
+
+    public void solve(Problem problem, Answer answer) {
+        solve(problem, problem.variables, answer);
     }
 
 }

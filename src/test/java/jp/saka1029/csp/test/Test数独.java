@@ -1,11 +1,15 @@
 package jp.saka1029.csp.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import jp.saka1029.csp.Domain;
@@ -19,7 +23,7 @@ class Test数独 {
 
     static int 辺の長さ = 9;
     static int 小四角形の辺の長さ = 3;
-    static Domain 定義域 = Domain.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    static Domain 定義域 = Domain.rangeClosed(1, 9);
 
     static String 名前(int r, int c) {
         return r + "@" + c;
@@ -34,7 +38,7 @@ class Test数独 {
         return 変数;
     }
 
-    static void 制約定義(Problem 問題, Variable[][] 変数) {
+    static List<Variable[]> 制約定義(Problem 問題, Variable[][] 変数) {
         List<Variable[]> 制約変数 = new ArrayList<>();
         for (int r = 0; r < 辺の長さ; ++r)
             制約変数.add(変数[r]);
@@ -54,6 +58,7 @@ class Test数独 {
             }
         for (Variable[] va : 制約変数)
             問題.allDifferent(va);
+        return 制約変数;
     }
 
     static void 答(Variable[][] 変数, Map<Variable, Integer> 解答) {
@@ -65,12 +70,26 @@ class Test数独 {
         }
     }
 
+    static List<Variable> 束縛順序定義(List<Variable> 変数, List<Variable[]> 制約変数) {
+        Set<Variable> 束縛順序 = new LinkedHashSet<>();
+        for (Variable v : 変数)
+            if (v.domain.size() == 1)
+                束縛順序.add(v);
+        Collections.sort(制約変数,
+            Comparator.comparingInt(a -> Arrays.stream(a).mapToInt(v -> v.domain.size()).sum()));
+        for (Variable[] a : 制約変数)
+            for (Variable v : a)
+                束縛順序.add(v);
+        return new ArrayList<>(束縛順序);
+    }
+
     static void 数独(int[][] 入力) {
         Problem 問題 = new Problem();
         Variable[][] 変数 = 変数定義(問題, 入力);
-        制約定義(問題, 変数);
+        List<Variable[]> 制約変数 = 制約定義(問題, 変数);
+        List<Variable> 束縛順序 = 束縛順序定義(問題.variables, 制約変数);
         Solver 解決 = new Solver();
-        解決.solve(問題, m -> 答(変数, m));
+        解決.solve(問題, 束縛順序, m -> 答(変数, m));
     }
 
     @Test
@@ -92,7 +111,6 @@ class Test数独 {
 		数独(入力);
 	}
 
-    @Disabled
     @Test
     void testGood_at_Sudoku_Heres_some_youll_never_complete() {
         // http://theconversation.com/good-at-sudoku-heres-some-youll-never-complete-5234

@@ -1,6 +1,7 @@
 package jp.saka1029.csp;
 
 import java.util.AbstractList;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public class Domain extends AbstractList<Integer> {
@@ -12,7 +13,7 @@ public class Domain extends AbstractList<Integer> {
     }
 
     public static Domain of(int... elements) {
-        return new Domain(elements);
+        return new Domain(Arrays.copyOf(elements, elements.length));
     }
 
     public static Domain range(int startInclusive, int endExclusive) {

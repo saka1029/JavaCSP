@@ -1,7 +1,6 @@
 package jp.saka1029.csp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +30,8 @@ public class Problem {
 
     public Constraint constraint(Predicate predicate, Variable... variables) {
         Constraint c = new Constraint(predicate, variables);
-        Arrays.stream(variables).forEach(v -> v.add(c));
+        for (Variable v : variables)
+            v.add(c);
         this._constraints.add(c);
         return c;
     }

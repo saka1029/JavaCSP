@@ -83,7 +83,15 @@ class Test数独 {
         return new ArrayList<>(束縛順序);
     }
 
-    static void 数独(int[][] 入力) {
+    static void 数独束縛順序指定なし(int[][] 入力) {
+        Problem 問題 = new Problem();
+        Variable[][] 変数 = 変数定義(問題, 入力);
+        制約定義(問題, 変数);
+        Solver 解決 = new Solver();
+        解決.solve(問題, m -> 答(変数, m));
+    }
+
+    static void 数独束縛順序指定あり(int[][] 入力) {
         Problem 問題 = new Problem();
         Variable[][] 変数 = 変数定義(問題, 入力);
         List<Variable[]> 制約変数 = 制約定義(問題, 変数);
@@ -93,7 +101,7 @@ class Test数独 {
     }
 
     @Test
-	void testWikipedia() {
+	void testWikipedia束縛順序指定なし() {
 		// Wikipedia 数独 の例題
 		// https://ja.wikipedia.org/wiki/%E6%95%B0%E7%8B%AC
 		int[][] 入力 = {
@@ -108,7 +116,26 @@ class Test数独 {
 			{ 0, 0, 0, 0, 8, 0, 0, 7, 9 },
 		};
 		logger.info("test wikipedia");
-		数独(入力);
+		数独束縛順序指定なし(入力);
+	}
+
+    @Test
+	void testWikipedia束縛順序指定あり() {
+		// Wikipedia 数独 の例題
+		// https://ja.wikipedia.org/wiki/%E6%95%B0%E7%8B%AC
+		int[][] 入力 = {
+			{ 5, 3, 0, 0, 7, 0, 0, 0, 0 },
+			{ 6, 0, 0, 1, 9, 5, 0, 0, 0 },
+			{ 0, 9, 8, 0, 0, 0, 0, 6, 0 },
+			{ 8, 0, 0, 0, 6, 0, 0, 0, 3 },
+			{ 4, 0, 0, 8, 0, 3, 0, 0, 1 },
+			{ 7, 0, 0, 0, 2, 0, 0, 0, 6 },
+			{ 0, 6, 0, 0, 0, 0, 2, 8, 0 },
+			{ 0, 0, 0, 4, 1, 9, 0, 0, 5 },
+			{ 0, 0, 0, 0, 8, 0, 0, 7, 9 },
+		};
+		logger.info("test wikipedia");
+		数独束縛順序指定あり(入力);
 	}
 
     @Test
@@ -126,7 +153,7 @@ class Test数独 {
             { 0, 4, 0, 0, 0, 0, 3, 0, 0 },
         };
         logger.info("Good at Sudoku Heres some youll never complete");
-        数独(入力);
+        数独束縛順序指定あり(入力);
     }
 
 }

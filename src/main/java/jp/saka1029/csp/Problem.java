@@ -36,6 +36,47 @@ public class Problem {
         return c;
     }
 
+    public Constraint constraint(Predicate1 predicate, Variable a) {
+        return constraint((Predicate)predicate, a);
+    }
+
+    public Constraint constraint(Predicate2 predicate, Variable a, Variable b) {
+        return constraint((Predicate)predicate, a, b);
+    }
+
+    public Constraint constraint(Predicate3 predicate, Variable a, Variable b, Variable c) {
+        return constraint((Predicate)predicate, a, b, c);
+    }
+
+    public Constraint constraint(Predicate4 predicate, Variable a, Variable b, Variable c, Variable d) {
+        return constraint((Predicate)predicate, a, b, c, d);
+    }
+
+    public Constraint constraint(Predicate5 predicate, Variable a, Variable b, Variable c, Variable d,
+        Variable e) {
+        return constraint((Predicate)predicate, a, b, c, d, e);
+    }
+
+    public Constraint constraint(Predicate6 predicate, Variable a, Variable b, Variable c, Variable d,
+        Variable e, Variable f) {
+        return constraint((Predicate)predicate, a, b, c, d, e, f);
+    }
+
+    public Constraint constraint(Predicate7 predicate, Variable a, Variable b, Variable c, Variable d,
+        Variable e, Variable f, Variable g) {
+        return constraint((Predicate)predicate, a, b, c, d, e, f, g);
+    }
+
+    public Constraint constraint(Predicate8 predicate, Variable a, Variable b, Variable c, Variable d,
+        Variable e, Variable f, Variable g, Variable h) {
+        return constraint((Predicate)predicate, a, b, c, d, e, f, g, h);
+    }
+
+    public Constraint constraint(Predicate9 predicate, Variable a, Variable b, Variable c, Variable d,
+        Variable e, Variable f, Variable g, Variable h, Variable i) {
+        return constraint((Predicate)predicate, a, b, c, d, e, f, g, h, i);
+    }
+
     public void allDifferent(Variable... variables) {
         for (int i = 0, size = variables.length; i < size; ++i)
             for (int j = i + 1; j < size; ++j)

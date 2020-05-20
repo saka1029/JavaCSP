@@ -34,8 +34,14 @@ class TestSendMoreMoney {
         Variable Y = problem.variable("Y", rest);
         Variable[] variables = {S, E, N, D, M, O, R, Y};
         problem.allDifferent(variables);
-        problem.constraint(a -> number(a[0], a[1], a[2], a[3]) + number(a[4], a[5], a[6], a[1])
-            == number(a[4], a[5], a[2], a[1], a[7]), variables);
+//        problem.constraint(a ->
+//            number(a[0], a[1], a[2], a[3])
+//            + number(a[4], a[5], a[6], a[1])
+//            == number(a[4], a[5], a[2], a[1], a[7]), variables);
+        problem.constraint((s, e, n, d, m, o, r, y) ->
+            number(s, e, n, d)
+            + number(m, o, r, e)
+            == number(m, o, n, e, y), S, E, N, D, M, O, R, Y);
 	    Solver solver = new Solver();
         solver.solve(problem, m -> logger.info(m.toString()));
     }

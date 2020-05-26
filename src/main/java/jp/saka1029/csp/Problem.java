@@ -77,6 +77,11 @@ public class Problem {
         return constraint((Predicate)predicate, a, b, c, d, e, f, g, h, i);
     }
 
+    public Constraint constraint(Predicate10 predicate, Variable a, Variable b, Variable c, Variable d,
+        Variable e, Variable f, Variable g, Variable h, Variable i, Variable j) {
+        return constraint((Predicate)predicate, a, b, c, d, e, f, g, h, i, j);
+    }
+
     public void allDifferent(Variable... variables) {
         for (int i = 0, size = variables.length; i < size; ++i)
             for (int j = i + 1; j < size; ++j)
